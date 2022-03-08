@@ -83,7 +83,6 @@ dependencies:
   - metpy
   - mkl
   - msgpack-python
-  - msys2-conda-epoch
   - nest-asyncio
   - netcdf4
   - numpy
