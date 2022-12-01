@@ -1,2 +1,9 @@
 **/misc
 *.nc
+**/data
+**/docs
+**/figures
+./notebooks/multisite/data
+./notebooks/multisite/output
+*.png
+*.mapbox_token
