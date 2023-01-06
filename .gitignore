@@ -9,3 +9,6 @@
 *.mapbox_token
 notebooks/multisite/nrcs_sntl.csv
 notebooks/SPLASH_notebooks/radsys_attributes.txt
+ASO*
+UER*
+PRISM*
