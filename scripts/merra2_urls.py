@@ -8,8 +8,8 @@ shortname = 'M2TMNXLND'
 version = '5.12.4'
 
 longname = 'tavgM_2d_lnd_Nx'
-product = 'GWETPROF'
-years = np.arange(2004,2023,1)
+product = 'GWETROOT'
+years = np.arange(1980,2023,1)
 months = np.arange(1,13,1)
 urls = []
 for year in years:
@@ -20,7 +20,7 @@ for year in years:
             col_num = 'MERRA2_300'
         else: 
             col_num = 'MERRA2_400'
-        urls.append(f'https://goldsmr4.gesdisc.eosdis.nasa.gov/opendap/MERRA2_MONTHLY/{shortname}.{version}/{year}/{col_num}.{longname}.{year}{mo}.nc4.nc4?{product}[0:0][254:260][115:120],time,lat[254:260],lon[115:120]')
+        urls.append(f"https://goldsmr4.gesdisc.eosdis.nasa.gov/opendap/MERRA2_MONTHLY/{shortname}.{version}/{year}/{col_num}.{longname}.{year}{mo}.nc4.nc4?{product}[0:0][254:260][115:120],time,lat[254:260],lon[115:120]")
 with open(r'merra2_urls.txt','w') as fp:
     for url in urls:
         fp.write(f"{url}\n")
