@@ -114,6 +114,7 @@ sntl_ds['PREC']  = sntl_ds['PREC'].assign_attrs({'units':'cm'})
 sntl_ds['TAVG'] =  (sntl_ds['TAVG']-32) * 5/9
 sntl_ds['TAVG'] = sntl_ds['TAVG'].assign_attrs({'units':'degC'})
 
+
 sntl_ds['SMS'] = sntl_ds['SMS'].assign_attrs({'units':'Volumetric Water Content'})
 
 
