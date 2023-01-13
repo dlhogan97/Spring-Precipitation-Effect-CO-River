@@ -16,8 +16,12 @@ for year in years:
     for mo in months: 
         if mo < 10:
             mo = '0'+str(mo)
-        if year < 2012:
+        if (year < 2012) & (year >= 2001):
             col_num = 'MERRA2_300'
+        elif (year < 2001) & (year >= 1992):
+            col_num = 'MERRA2_200'
+        elif year <1992:
+            col_num = 'MERRA2_100'
         else: 
             col_num = 'MERRA2_400'
         urls.append(f"https://goldsmr4.gesdisc.eosdis.nasa.gov/opendap/MERRA2_MONTHLY/{shortname}.{version}/{year}/{col_num}.{longname}.{year}{mo}.nc4.nc4?{product}[0:0][254:260][115:120],time,lat[254:260],lon[115:120]")

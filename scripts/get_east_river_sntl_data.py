@@ -11,7 +11,7 @@ import xarray as xr
 import requests
 
 # get soil moisture data. This provides information from the deepest sensor (20-inchs) and average temperature, but those values are skewed by surface measurements
-site_ids = ["380:CO:SNTL", "680:CO:SNTL", "737:CO:SNTL"]
+site_ids = ["380:CO:SNTL",'680:CO:SNTL','737:CO:SNTL']
 API_DOMAIN = "https://api.snowdata.info/"
 
 # grabs input
@@ -20,7 +20,7 @@ edate = datetime.strptime(edate,'%Y%m%d')
 
 def get_awdb_data(
     site_ids,
-    elements=["SMS","TAVG","WTEQ","PREC"],
+    elements=["SMS","TAVG","SNWD","WTEQ","PREC"],
     sdate=datetime(1899, 10, 1),
     edate=edate,
     orient="records",
@@ -72,21 +72,52 @@ def get_awdb_data(
             return dfs[0]
     return dfs
 
+# Grab dataframes
 sntl_dfs = get_awdb_data(site_ids=site_ids)
 
+# Make the index a datetime
 for i,df in enumerate(sntl_dfs):
     df.index = pd.to_datetime(df.index)
     sntl_dfs[i] = df
 
-# adding datetime as needed and filtering to 2015
+# create a dictionary for conversion to xarray
 sntl_df_dict = {
-    'Butte_'+site_ids[0]:pd.concat(sntl_dfs[0:4], axis=1).sort_index().to_xarray(),
-    'ParkCone_'+site_ids[1]:pd.concat(sntl_dfs[4:8], axis=1).sort_index().to_xarray(),
-    'SchofieldPass_'+site_ids[2]:pd.concat(sntl_dfs[8:], axis=1).sort_index().to_xarray(),
+    'Butte_'+site_ids[0]:pd.concat(sntl_dfs[0:5], axis=1).sort_index().to_xarray(),
+    'ParkCone_'+site_ids[1]:pd.concat(sntl_dfs[5:10], axis=1).sort_index().to_xarray(),
+    'SchofieldPass_'+site_ids[2]:pd.concat(sntl_dfs[10:], axis=1).sort_index().to_xarray(),
 }
+# convert to xarray
 sntl_ds = xr.concat(sntl_df_dict.values(), pd.Index(sntl_df_dict.keys(), name='Location'))
 sntl_ds = sntl_ds.assign_coords({'WY':sntl_ds.Date.dt.year.where(sntl_ds.Date.dt.month < 10, sntl_ds.Date.dt.year + 1)})
 
+# Apply data filters
+sntl_ds['SNWD'] = sntl_ds.where(abs(sntl_ds['SNWD'].diff(dim='Date'))<50)['SNWD']
+
+sntl_ds['TAVG'] = sntl_ds.where((abs(sntl_ds['TAVG'].diff(dim='Date'))<50) & 
+                                    (sntl_ds['TAVG']>-50) &
+                                    ((sntl_ds['TAVG']<110)))['TAVG']
+
+sntl_ds['SMS'] = sntl_ds.where((sntl_ds['SMS']>0) & 
+                   (sntl_ds['SMS']<50) & 
+                   (abs(sntl_ds['SMS'].diff(dim='Date',n=1)<15)))['SMS']
+
+# Unit conversions
+sntl_ds['SNWD'] = sntl_ds['SNWD']*2.54
+sntl_ds['SNWD'] = sntl_ds['SNWD'].assign_attrs({'units':'cm'})
+
+sntl_ds['WTEQ'] = sntl_ds['WTEQ']*2.54
+sntl_ds['WTEQ']  = sntl_ds['WTEQ'].assign_attrs({'units':'cm'})
+
+sntl_ds['PREC'] = sntl_ds['PREC']*2.54
+sntl_ds['PREC']  = sntl_ds['PREC'].assign_attrs({'units':'cm'})
+
+sntl_ds['TAVG'] =  (sntl_ds['TAVG']-32) * 5/9
+sntl_ds['TAVG'] = sntl_ds['TAVG'].assign_attrs({'units':'degC'})
+
+sntl_ds['SMS'] = sntl_ds['SMS'].assign_attrs({'units':'Volumetric Water Content'})
+
+
+
+
 if __name__ == "__main__":
-    if not os.path.exists(f"../../../../../../storage/dlhogan/sos/data/east_river_sntl_{edate.strftime(format='%Y%m%d')}.nc"):
-        sntl_ds.to_netcdf(f"../../../../../../storage/dlhogan/sos/data/east_river_sntl_{edate.strftime(format='%Y%m%d')}.nc")
+    sntl_ds.to_netcdf(f"../../../../../../storage/dlhogan/sos/data/east_river_sntl_{edate.strftime(format='%Y%m%d')}.nc")
