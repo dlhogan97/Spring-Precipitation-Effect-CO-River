@@ -11,7 +11,7 @@ import xarray as xr
 import requests
 
 # get soil moisture data. This provides information from the deepest sensor (20-inchs) and average temperature, but those values are skewed by surface measurements
-site_ids = ["380:CO:SNTL",'680:CO:SNTL','737:CO:SNTL']
+site_ids = ["380:CO:SNTL",'680:CO:SNTL','737:CO:SNTL', '1141:CO:SNTL']
 API_DOMAIN = "https://api.snowdata.info/"
 
 # grabs input
@@ -84,7 +84,8 @@ for i,df in enumerate(sntl_dfs):
 sntl_df_dict = {
     'Butte_'+site_ids[0]:pd.concat(sntl_dfs[0:5], axis=1).sort_index().to_xarray(),
     'ParkCone_'+site_ids[1]:pd.concat(sntl_dfs[5:10], axis=1).sort_index().to_xarray(),
-    'SchofieldPass_'+site_ids[2]:pd.concat(sntl_dfs[10:], axis=1).sort_index().to_xarray(),
+    'SchofieldPass_'+site_ids[2]:pd.concat(sntl_dfs[10:15], axis=1).sort_index().to_xarray(),
+    'UpperTaylor_'+site_ids[2]:pd.concat(sntl_dfs[15:], axis=1).sort_index().to_xarray(),
 }
 # convert to xarray
 sntl_ds = xr.concat(sntl_df_dict.values(), pd.Index(sntl_df_dict.keys(), name='Location'))
@@ -102,13 +103,13 @@ sntl_ds['SMS'] = sntl_ds.where((sntl_ds['SMS']>0) &
                    (abs(sntl_ds['SMS'].diff(dim='Date',n=1)<15)))['SMS']
 
 # Unit conversions
-sntl_ds['SNWD'] = sntl_ds['SNWD']*2.54
+# sntl_ds['SNWD'] = sntl_ds['SNWD']*2.54
 sntl_ds['SNWD'] = sntl_ds['SNWD'].assign_attrs({'units':'cm'})
 
-sntl_ds['WTEQ'] = sntl_ds['WTEQ']*2.54
+# sntl_ds['WTEQ'] = sntl_ds['WTEQ']*2.54
 sntl_ds['WTEQ']  = sntl_ds['WTEQ'].assign_attrs({'units':'cm'})
 
-sntl_ds['PREC'] = sntl_ds['PREC']*2.54
+# sntl_ds['PREC'] = sntl_ds['PREC']*2.54
 sntl_ds['PREC']  = sntl_ds['PREC'].assign_attrs({'units':'cm'})
 
 sntl_ds['TAVG'] =  (sntl_ds['TAVG']-32) * 5/9
