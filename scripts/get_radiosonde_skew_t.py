@@ -22,25 +22,6 @@ radiosonde ='gucsondewnpnM1.b1'
 start = date_start[0:10]
 end = date_end[0:10]
 
-
-
-# Download SAIL sonde data
-try:
-    sonde1_start = dt.datetime.strptime(date_start,'%Y-%m-%dT%H:%M:%S')
-    sonde1_end = sonde1_start + dt.timedelta(hours=6)
-
-    sonde_ds = funcs.get_sail_data(username, token, radiosonde, start, end)
-
-    sonde1 = sonde_ds.sel(time=slice(sonde1_start,sonde1_end))
-    if one_or_two == 'Y':
-        sonde2_start = sonde1_end + dt.timedelta(hours=6)
-        sonde2_end = sonde2_start + dt.timedelta(hours=6)
-    
-        sonde2 = sonde_ds.sel(time=slice(sonde2_start,sonde2_end))
-except: 
-    print('Data not found, may not be loaded yet.')
-
-
 def plot_skewT(ds):
     # Create a new figure. The dimensions here give a good aspect ratio
     fig = plt.figure(figsize=(9, 9))
@@ -104,6 +85,23 @@ def plot_skewT(ds):
     plt.show()
     return
 
-plot_skewT(sonde1)
-if one_or_two == "Y":
-    plot_skewT(sonde2)
+# Download SAIL sonde data
+try:
+    sonde1_start = dt.datetime.strptime(date_start,'%Y-%m-%dT%H:%M:%S')
+    sonde1_end = sonde1_start + dt.timedelta(hours=6)
+
+    sonde_ds = funcs.get_sail_data(username, token, radiosonde, start, end)
+
+    sonde1 = sonde_ds.sel(time=slice(sonde1_start,sonde1_end))
+    if one_or_two == 'Y':
+        sonde2_start = sonde1_end + dt.timedelta(hours=6)
+        sonde2_end = sonde2_start + dt.timedelta(hours=6)
+    
+        sonde2 = sonde_ds.sel(time=slice(sonde2_start,sonde2_end))
+    plot_skewT(sonde1)
+    if one_or_two == "Y":
+        plot_skewT(sonde2)
+except: 
+    print('Data not found, may not be loaded yet.')
+
+
