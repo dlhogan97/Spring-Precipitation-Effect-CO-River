@@ -11,9 +11,12 @@ import metpy.calc as mpcalc
 from metpy.plots import Hodograph, SkewT
 from metpy.units import units
 
-date_start = input("One day of sondes.\nDate and Time for Radiosonde Start (format YY-MM-DDTHH:MM:SS): ")
+date_start = input("One day of sondes.\nDate and Time for Radiosonde Start (format YYYY-MM-DDTHH:MM:SS): ")
+
 date_end = input("Date and Time for Radiosonde End (format YYYY-MM-DD): ")
 one_or_two = input("Y/N for two plots to be produced: ")
+    
+
 # Personal access necessary for downloading from the ARM portal, need an account to due so
 username = 'dlhogan@uw.edu'
 token = '7f1c805e6ae94c21'
@@ -62,24 +65,28 @@ def plot_skewT(ds):
     skew.shade_cin(p, t, parcel_prof, td)
     skew.shade_cape(p, t, parcel_prof)
 
-    # Plot a zero degree isotherm
-    skew.ax.axvline(0, color='c', linestyle='--', linewidth=2)
+    # Plot dendritic growth zone
+    skew.ax.axvline(-13, color='c', linestyle='--', linewidth=2)
+    skew.ax.axvline(-19, color='c', linestyle='--', linewidth=2)
+    skew.shade_area(p, -13,-19, color='c', alpha=0.3, label='DGZ')
 
     # Add the relevant special lines
     skew.plot_dry_adiabats()
     skew.plot_moist_adiabats()
-    skew.plot_mixing_lines()
+    skew.plot_mixing_lines(pressure=p)
+    plt.legend(loc='upper left')
 
     # Create a hodograph
     # Create an inset axes object that is 40% width and height of the
     # figure and put it in the upper right hand corner.
     ax_hod = inset_axes(skew.ax, '40%', '40%', loc=1)
-    h = Hodograph(ax_hod, component_range=20.,)
+    h = Hodograph(ax_hod, component_range=60.,)
     h.add_grid(increment=20)
     h.plot_colormapped(u[ix], v[ix], ds.wspd[ix])  # Plot a line colored by wind speed
 
     start_hour = ds.time.dt.hour[0]
     # Save the plot
+
     plt.savefig(f'../figures/radiosondes/SAIL_sonde_{start}_{start_hour}UTC.png')
     # Show the plot
     plt.show()
@@ -93,13 +100,12 @@ try:
     sonde_ds = funcs.get_sail_data(username, token, radiosonde, start, end)
 
     sonde1 = sonde_ds.sel(time=slice(sonde1_start,sonde1_end))
-    if one_or_two == 'Y':
-        sonde2_start = sonde1_end + dt.timedelta(hours=6)
-        sonde2_end = sonde2_start + dt.timedelta(hours=6)
-    
-        sonde2 = sonde_ds.sel(time=slice(sonde2_start,sonde2_end))
+
     plot_skewT(sonde1)
     if one_or_two == "Y":
+        sonde2_start = sonde1_end + dt.timedelta(hours=6)
+        sonde2_end = sonde2_start + dt.timedelta(hours=6)
+        sonde2 = sonde_ds.sel(time=slice(sonde2_start,sonde2_end))
         plot_skewT(sonde2)
 except: 
     print('Data not found, may not be loaded yet.')
