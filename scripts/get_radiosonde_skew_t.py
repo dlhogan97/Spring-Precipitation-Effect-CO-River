@@ -11,7 +11,7 @@ import metpy.calc as mpcalc
 from metpy.plots import Hodograph, SkewT
 from metpy.units import units
 
-date_start = input("One day of sondes.\nDate and Time for Radiosonde Start (format YYYY-MM-DDTHH:MM:SS): ")
+date_start = input("One day of sondes.\nDate and Time for Radiosonde Start (format YYYY-MM-DD): ")
 
 date_end = input("Date and Time for Radiosonde End (format YYYY-MM-DD): ")
 one_or_two = input("Y/N for two plots to be produced: ")
@@ -94,7 +94,7 @@ def plot_skewT(ds):
 
 # Download SAIL sonde data
 try:
-    sonde1_start = dt.datetime.strptime(date_start,'%Y-%m-%dT%H:%M:%S')
+    sonde1_start = dt.datetime.strptime(date_start+'T11:00:00','%Y-%m-%dT%H:%M:%S')
     sonde1_end = sonde1_start + dt.timedelta(hours=6)
 
     sonde_ds = funcs.get_sail_data(username, token, radiosonde, start, end)
