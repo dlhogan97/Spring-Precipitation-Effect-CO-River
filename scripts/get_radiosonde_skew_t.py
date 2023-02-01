@@ -53,7 +53,7 @@ def plot_skewT(ds):
     skew.plot(p, td, 'g')
     skew.plot_barbs(p[ix], u[ix], v[ix])
     skew.ax.set_ylim(max(p), 100)
-    skew.ax.set_xlim(min(t.magnitude)-10, max(t.magnitude)+20)
+    skew.ax.set_xlim(min(t.magnitude)-10, max(t.magnitude)+40)
 
     # Plot LCL as black dot
     skew.plot(lcl_pressure, lcl_temperature, 'ko', markerfacecolor='black')
