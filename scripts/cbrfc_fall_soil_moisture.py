@@ -10,6 +10,7 @@ Date: Jan 9, 2023
 import numpy as np
 import xarray as xr
 import gzip
+import pandas as pd
 
 # Create grid for data
 xllcorner=-116.00416667027
@@ -70,8 +71,8 @@ url_list =[
     'https://www.cbrfc.noaa.gov/rmap/grid800/asc/histsoilpct/histsoilpct.trima.15112012.gz',
     'https://www.cbrfc.noaa.gov/rmap/grid800/asc/histsoilpct/histsoilpct.trima.15112013.gz',
     'https://www.cbrfc.noaa.gov/rmap/grid800/asc/histsoilpct/histsoilpct.trima.15112014.gz',
-    'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trima.15112015.gz',
-    'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trima.15112016.gz',
+    'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trimb.01112015.gz',
+    'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trimb.16112016.gz',
     'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trima.16112017.gz',
     'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trima.15112018.gz',
     'https://www.cbrfc.noaa.gov/rmap/grid800/asc/soilfall/soilfall.trima.15112019.gz',
@@ -92,18 +93,15 @@ def cbrfc_soil_moisture(urls, years, outpath):
     # Iterate over each year and grab the data that I want
     for i,year in enumerate(years):
         print(year)
-        if year in [2015, 2016]:
-            print(f'Data not availble for {year}')
-            continue
-        else:
-            # Grab the data from the urls provided
-            cbrfc_data = pd.read_csv(urls[i], compression='gzip',delim_whitespace=True,skiprows=6, header=None)
-            ds = xr.DataArray((100*cbrfc_data).to_numpy(),dims={'lat':lat,'lon':lon})
+        pd.read_csv(urls[i], compression='gzip',delim_whitespace=True,skiprows=6, header=None)
+        # Grab the data from the urls provided
+        cbrfc_data = pd.read_csv(urls[i], compression='gzip',delim_whitespace=True,skiprows=6, header=None)
+        ds = xr.DataArray((100*cbrfc_data).to_numpy(),dims={'lat':lat,'lon':lon})
         combined_ds.loc[dict(year=year)] = ds
     combined_ds = combined_ds.where(combined_ds>0, np.nan)
     combined_ds.to_netcdf(outpath)
     return combined_ds
 
-if __name__ == 'main':
-    outpath = '../../../../../../storage/dlhogan/sos/data/cbrfc_fall_soil_product.nc'
-    cbrfc_ds = cbrfc_soil_moisture(url_list,years, outpath)
+
+outpath = '/storage/dlhogan/sos/data/cbrfc_fall_soil_product.nc'
+cbrfc_ds = cbrfc_soil_moisture(url_list,years, outpath)
