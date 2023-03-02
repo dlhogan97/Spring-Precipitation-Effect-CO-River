@@ -26,7 +26,7 @@ edate = datetime.strptime(edate,'%Y%m%d')
 
 def get_awdb_data(
     site_ids,
-    elements=["WTEQ"],
+    elements=["WTEQ", "PREC"],
     sdate=datetime(1899, 10, 1),
     edate=edate,
     orient="records",
@@ -90,7 +90,7 @@ for i,df in enumerate(sntl_dfs):
 sntl_df_dict = {}
 for i,site in enumerate(site_ids):
     if sntl_dfs[i] is not None:
-        sntl_df_dict[site] = sntl_dfs[i].sort_index().to_xarray()
+        sntl_df_dict[site] = pd.concat(sntl_dfs[i:i+2], axis=1).sort_index().to_xarray()
 
 # convert to xarray
 sntl_ds = xr.concat(sntl_df_dict.values(), pd.Index(sntl_df_dict.keys(), name='Location'))
@@ -100,6 +100,9 @@ sntl_ds = sntl_ds.assign_coords({'WY':sntl_ds.Date.dt.year.where(sntl_ds.Date.dt
 
 sntl_ds['WTEQ'] = sntl_ds['WTEQ']*2.54
 sntl_ds['WTEQ']  = sntl_ds['WTEQ'].assign_attrs({'units':'cm'})
+
+sntl_ds['PREC'] = sntl_ds['PREC']*2.54
+sntl_ds['PREC']  = sntl_ds['PREC'].assign_attrs({'units':'cm'})
 
 
 # outpath = '/storage/dlhogan/sos/data'
