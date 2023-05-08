@@ -10,7 +10,7 @@ import os
 
 # Pull in SNTL data and closest sites to basins 
 # UCRB Basins
-ucrb_hcdn_basins = gpd.read_file('./ucrb_hcdn_polygons.json')
+ucrb_hcdn_basins = gpd.read_file('./ucrb_hcdn_co_polygons_final.json')
 
 # Get SNTL data
 AWDB_API_DOMAIN = "https://api.snowdata.info"
@@ -141,6 +141,7 @@ def season_mean(ds, calendar="standard"):
 
 # Make list for all HCDN sites
 seasonal_prisms_list = []
+basin_average_list = []
 for site in nearest_sntl.keys():
     # Get site ID
     site_id = site
@@ -149,6 +150,7 @@ for site in nearest_sntl.keys():
     ds = single_hcdn_basin_prism_precip(site_id)
     # Create basin average precip for prism
     prism_basin_avg = ds.mean(dim='x',skipna=True).mean(dim='y', skipna=True)
+    basin_average_list.append(prism_basin_avg)
     # Get seasonal anaomalies
     seasonal_prism = season_mean(get_monthly_prism_anomalies(prism_basin_avg)).to_dataframe().dropna()
     # add to list
@@ -157,5 +159,9 @@ for site in nearest_sntl.keys():
 hcdn_season_prism_ds = pd.concat(seasonal_prisms_list)
 hcdn_season_prism_ds['WY'] = hcdn_season_prism_ds.index.year.where(hcdn_season_prism_ds.index.month<10, hcdn_season_prism_ds.index.year+1)
 
+basin_average_df = pd.concat(basin_average_list)
+basin_average_df['WY'] = basin_average_df.index.year.where(basin_average_df.index.month<10, basin_average_df.index.year+1)
+
 if __name__ == "__main__":
-    hcdn_season_prism_ds.to_csv('ucrb_hcdn_seasonal_prism_anomalies.csv')
+    # hcdn_season_prism_ds.to_csv('ucrb_hcdn_seasonal_prism_anomalies.csv')
+    basin_average_df.to_csv('ucrb_hcdn_annual_prism_totals.csv')
