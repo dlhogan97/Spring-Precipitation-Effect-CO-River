@@ -49,3 +49,9 @@ notebooks/Upper_CO_Analysis/grace/timeseries_water_GRACE.csv
 notebooks/Upper_CO_Analysis/grace/UCRB_GRACE_CORRECTED_FILTERED.csv
 notebooks/Upper_CO_Analysis/landsat/get_landsat_imagery.py
 notebooks/subset_M2TMNXLND_5.12.4_20221219_203407_.txt
+notebooks/Upper_CO_Analysis/basin_characteristics/ucrb_aspect.tif
+notebooks/Upper_CO_Analysis/basin_characteristics/ucrb_dem_150m.tif
+notebooks/Upper_CO_Analysis/basin_characteristics/ucrb_hcdn_huc4.json
+notebooks/Upper_CO_Analysis/basin_characteristics/ucrb_hillshade_500m.tfw
+notebooks/Upper_CO_Analysis/basin_characteristics/ucrb_hillshade_500m.tif
+notebooks/Upper_CO_Analysis/basin_characteristics/ucrb_hillshade_500m.tif.aux.xml
