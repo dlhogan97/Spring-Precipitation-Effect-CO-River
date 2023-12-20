@@ -29,7 +29,7 @@ To replicate or build upon the research, follow these steps:
 Use the `ucrb_analysis_env.yml` file to create an environment which will install all necessary dependencies for this analysis.
 
 3. **Data Preparation:**
-All data can be downloaded from [this zenodo repository](10.5281/zenodo.10056373)
+All data can be downloaded from [![DOI](zenodo.10056373.svg)](https://zenodo.org/records/10056373)
 
 4. **Run the Analysis:**
 Navigate to the `notebooks` folder within `Upper_CO_Analysis`. A README is available within the `notebooks` folder to provide information about what each file is meant to do. Descriptions of each file are also available within the notebooks themselves. In summary, this folder contains a collection of Jupyter Notebooks, each serving a specific purpose in the analysis and development of products related to the study of the Upper Colorado River Basin (UCRB), PRISM data, Hydro-Climatic Data Network (HCDN), and associated investigations. Notebooks are categorized into numbered analysis files (e.g., `01_UCRB_exploratory_analysis_20230425.ipynb`) and development files (e.g., `dev_00_snowcourse_investigation.ipynb`).
