@@ -2,7 +2,7 @@
 
 ## Overview
 
-Welcome to the repository for my manuscript. This repository contains the code, data, and analysis tools used in my research paper titled "Colorado River Streamflow Declines Explained By Decreased Spring Precipitation." The doi for this repository is:
+Welcome to the repository for my manuscript. This repository contains the code, data, and analysis tools used in my research paper titled "Colorado River Streamflow Declines Explained By Decreased Spring Precipitation."
 [![DOI](zenodo.10413407.svg)](https://zenodo.org/account/settings/github/repository/dlhogan97/Spring-Precipitation-Effect-CO-River)
 ## Repository Structure
 
