@@ -20,24 +20,7 @@ ucrb_hcdn_co_gdf = ucrb_hcdn_stations.to_crs(basins.crs)
 ucrb_hcdn_co_gdf = ucrb_hcdn_co_gdf.drop('index_right',axis=1)
 
 ucrb_hcdn_combined = gpd.sjoin(basins,ucrb_hcdn_co_gdf)
-# old version
-# %%
-# ucrb_hcdn_stations = gpd.read_file('./ucrb_hcdn_co_gdf_final.json')
-# ucrb_hcdn_stations['STAID'] = ['0'+str(station) for station in ucrb_hcdn_stations['STAID']]
 
-# # %%
-# basins = gpd.read_file(r"C:\Users\dlhogan\OneDrive - UW\Documents\GitHub\sublimation_of_snow\data\bas_ref_all.shp")
-
-# # %%
-# basins = basins.to_crs(epsg='4326')
-
-# # %%
-# ucrb_hcdn_basins = basins[basins['GAGE_ID'].isin(ucrb_hcdn_stations['STAID'])].reset_index(drop=True)
-
-# # %%
-# ucrb_hcdn_basins.to_file('./ucrb_hcdn_polygons.json',driver='GeoJSON')
-
-# %%
 
 
 
