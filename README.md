@@ -1,8 +1,8 @@
-# Recent Colorado River Streamflow Deficits Explained by Decreased Spring Precipitation
+# Recent Upper Colorado River Streamflow Declines Driven by Loss of Spring Precipitation
 
 ## Overview
 
-Welcome to the repository for my manuscript. This repository contains the code, data, and analysis tools used in my research paper titled "Colorado River Streamflow Declines Explained By Decreased Spring Precipitation."
+Welcome to the repository for my manuscript. This repository contains the code, data, and analysis tools used in my research paper titled "Recent Upper Colorado River Streamflow Declines Driven by Loss of Spring Precipitation."
 [![DOI](zenodo.10413407.svg)](https://zenodo.org/account/settings/github/repository/dlhogan97/Spring-Precipitation-Effect-CO-River)
 ## Repository Structure
 
