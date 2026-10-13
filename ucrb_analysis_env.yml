@@ -17,6 +17,7 @@ dependencies:
   - seaborn
   - matplotlib
   - pandas
+  - pygeohydro
   - numpy
   - joblib
   - ipykernel
