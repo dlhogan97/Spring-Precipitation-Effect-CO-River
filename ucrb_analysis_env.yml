@@ -2,54 +2,30 @@ name: ucrb_analysis_env
 channels:
   - conda-forge
 dependencies:
+  - python=3.10
   - contextily
   - geopandas
+  - rasterio=1.3.11
+  - rioxarray=0.18.2
+  - libgdal-netcdf=3.9.2
+  - netcdf4
   - h5netcdf
   - h5py
-  - hdf4
-  - hdf5
-  - ipykernel
-  - ipython
-  - jedi
-  - joblib
-  - json-c
-  - jupyter_client
-  - jupyter_core
-  - matplotlib
-  - matplotlib-base
-  - matplotlib-inline
-  - netcdf4
-  - numpy
-  - pandas
-  - pillow
-  - pip
-  - proj
-  - pymannkendall
-  - python=3.10.13
-  - python-dateutil
-  - python-tzdata
-  - python_abi
-  - pytz
-  - rasterio
-  - requests
-  - rioxarray
-  - scipy
-  - seaborn
-  - statsmodels
-  - urllib3
-  - wheel
   - xarray
-
+  - scipy
+  - statsmodels
+  - seaborn
+  - matplotlib
+  - pandas
+  - numpy
+  - joblib
+  - ipykernel
+  - pymannkendall
+  - requests
+  - beautifulsoup4
+  - lxml
+  - zeep
+  - isodate
+  - pip
   - pip:
-      - beautifulsoup4
-      - fiona
-      # - geopandas
-      - idna
-      - isodate
-      - lxml
       - metloom
-      - pyeto
-      - shapely
-      - soupsieve
-      - zeep
-prefix: /home/dlhogan/miniforge3/envs/ucrb_analysis_env
